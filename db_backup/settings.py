@@ -102,6 +102,7 @@ DBBACKUP_STORAGE_OPTIONS = {
 
 import os  # if not yet imported
 
+# for local development
 DBBACKUP_CONNECTORS = {
     'default': {
         'USER': 'postgres',      # Optional: Use a different user for backups
@@ -115,6 +116,20 @@ DBBACKUP_CONNECTORS = {
         'EXTENSION': 'dump',             # Extension of the backup file
     }
 }
+# for production
+DBBACKUP_CONNECTORS = {
+        'default': {
+            'USER': os.getenv('POSTGRES_USER'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+            'HOST': os.getenv('POSTGRES_HOST'),
+            'CONNECTOR': 'dbbackup.db.postgresql.PgDumpConnector',
+            'DUMP_CMD': 'pg_dump',
+            'RESTORE_CMD': 'psql',
+            'SINGLE_TRANSACTION': True,
+            'DROP': True,
+            'EXTENSION': 'dump'
+        }
+    }
 
 
 DBBACKUP_HOSTNAME = 'universalml'
